@@ -73,15 +73,18 @@ public class CalculatorDemo extends JFrame {
         but_back.setBounds(x[1], y[1], BUT_WIDTH, BUT_HEIGHT);
         but_back.setCursor(cur);
         but_back.addActionListener(event->{
-
-            if(Pattern.matches("[0]*", tout.getText())){
-                tout.setText("0");
-            }else {
-                String str1 = new String( tout.getText().toString() );
-                String str2 = str1.substring(0, str1.length() -1 );
-               tout.setText(str2);
-            }
-
+           String str1 = tout.getText();
+           StringBuilder str2 = new StringBuilder();
+           for( int i = 0; i < (str1.length()-1); i++){
+               str2.append(str1.charAt(i));
+           }
+           if( str2.toString().equals("")){
+               tout.setText("0");
+           }
+           else{
+               tout.setText( str2.toString());
+               //System.out.println(str2.toString());
+           }
         });
         panel.add(but_back);
 
@@ -97,6 +100,9 @@ public class CalculatorDemo extends JFrame {
         but_div.setBackground(Color.WHITE);
         but_div.setBounds(x[3], y[1], BUT_WIDTH, BUT_HEIGHT);
         but_div.setCursor(cur);
+        but_div.addActionListener(event->{
+
+        });
         panel.add(but_div);
 
         but_7 = new JButton("7");
