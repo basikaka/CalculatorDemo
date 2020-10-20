@@ -15,7 +15,8 @@ public class CalculatorDemo extends JFrame {
     private static final int MARGIN_X = 20;
     private static final int MARGIN_Y = 60;
 
-    private boolean addWrite = true;
+    private boolean addWrite = true;  // control the text field display
+    private boolean keepgo   = true;  // control the Opt model
 
     JTextField tout;
     JButton but_c, but_back, but_mod, but_div,
@@ -29,6 +30,18 @@ public class CalculatorDemo extends JFrame {
     Font bigTxtBtnFont = new Font("Comic Sans MS", Font.PLAIN, 33);
     Font butFont = new Font("Comic Sans MS", Font.PLAIN, 28);
     Font smallTxtBtnFont = new Font("Comic Sans MS", Font.PLAIN, 24);
+
+    public enum Opt {
+        NORMAL,  // NULL Operator
+        MOD,
+        DIV,
+        MUL,
+        ADD,
+        SUB
+    }
+    Opt opt = Opt.NORMAL;
+
+    private double saveVal = 0; //save current result of calc or first input
 
     public CalculatorDemo(){
         super();
@@ -101,7 +114,19 @@ public class CalculatorDemo extends JFrame {
         but_div.setBounds(x[3], y[1], BUT_WIDTH, BUT_HEIGHT);
         but_div.setCursor(cur);
         but_div.addActionListener(event->{
-
+            if(Pattern.matches("([-]?\\d+[.]\\d*)|(\\d+)", tout.getText())){
+                if(keepgo){
+                    saveVal = calc(saveVal, tout.getText(), opt);
+                    if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
+                        tout.setText( String.valueOf((int) saveVal));
+                    }else {
+                        tout.setText( String.valueOf(saveVal));
+                    }
+                    keepgo = false;
+                    addWrite = false;
+                    opt = Opt.DIV;
+                }
+            }
         });
         panel.add(but_div);
 
@@ -111,11 +136,17 @@ public class CalculatorDemo extends JFrame {
         but_7.setBounds(x[0], y[2], BUT_WIDTH, BUT_HEIGHT);
         but_7.setCursor(cur);
         but_7.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("7");
+            if(addWrite){
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("7");
+                }else {
+                    tout.setText( tout.getText() + "7");
+                }
             }else {
-                tout.setText( tout.getText() + "7");
+                tout.setText("7");
+                addWrite = true;
             }
+            keepgo = true;
         });
 
         panel.add(but_7);
@@ -126,11 +157,17 @@ public class CalculatorDemo extends JFrame {
         but_8.setBounds(x[1], y[2], BUT_WIDTH, BUT_HEIGHT);
         but_8.setCursor(cur);
         but_8.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("8");
+            if(addWrite){
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("8");
+                }else {
+                    tout.setText( tout.getText() + "8");
+                }
             }else {
-                tout.setText( tout.getText() + "8");
+                tout.setText("8");
+                addWrite = true;
             }
+            keepgo = true;
         });
         panel.add(but_8);
 
@@ -140,11 +177,18 @@ public class CalculatorDemo extends JFrame {
         but_9.setBounds(x[2], y[2], BUT_WIDTH, BUT_HEIGHT);
         but_9.setCursor(cur);
         but_9.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("9");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("9");
+                } else {
+                    tout.setText(tout.getText() + "9");
+                }
             }else {
-                tout.setText( tout.getText() + "9");
+                tout.setText("9");
+                addWrite = true;
             }
+            keepgo = true;
+
         });
         panel.add(but_9);
 
@@ -163,11 +207,17 @@ public class CalculatorDemo extends JFrame {
         but_4.setBounds(x[0], y[3], BUT_WIDTH, BUT_HEIGHT);
         but_4.setCursor(cur);
         but_4.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("4");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("4");
+                } else {
+                    tout.setText(tout.getText() + "4");
+                }
             }else {
-                tout.setText( tout.getText() + "4");
+                tout.setText("4");
+                addWrite = true;
             }
+            keepgo = true;
         });
         panel.add(but_4);
 
@@ -177,11 +227,18 @@ public class CalculatorDemo extends JFrame {
         but_5.setBounds(x[1], y[3], BUT_WIDTH, BUT_HEIGHT);
         but_5.setCursor(cur);
         but_5.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("5");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("5");
+                } else {
+                    tout.setText(tout.getText() + "5");
+                }
             }else {
-                tout.setText( tout.getText() + "5");
+                tout.setText("5");
+                addWrite = true;
             }
+            keepgo = true;
+
         });
         panel.add(but_5);
 
@@ -191,11 +248,18 @@ public class CalculatorDemo extends JFrame {
         but_6.setBounds(x[2], y[3], BUT_WIDTH, BUT_HEIGHT);
         but_6.setCursor(cur);
         but_6.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("6");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("6");
+                } else {
+                    tout.setText(tout.getText() + "6");
+                }
             }else {
-                tout.setText( tout.getText() + "6");
+                tout.setText("6");
+                addWrite = true;
             }
+            keepgo = true;
+
         });
         panel.add(but_6);
 
@@ -213,11 +277,17 @@ public class CalculatorDemo extends JFrame {
         but_1.setBounds(x[0], y[4], BUT_WIDTH, BUT_HEIGHT);
         but_1.setCursor(cur);
         but_1.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("1");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("1");
+                } else {
+                    tout.setText(tout.getText() + "1");
+                }
             }else {
-                tout.setText( tout.getText() + "1");
+                tout.setText("1");
+                addWrite = true;
             }
+            keepgo = true;
         });
         panel.add(but_1);
 
@@ -227,11 +297,17 @@ public class CalculatorDemo extends JFrame {
         but_2.setBounds(x[1], y[4], BUT_WIDTH, BUT_HEIGHT);
         but_2.setCursor(cur);
         but_2.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("2");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("2");
+                } else {
+                    tout.setText(tout.getText() + "2");
+                }
             }else {
-                tout.setText( tout.getText() + "2");
+                tout.setText("2");
+                addWrite = true;
             }
+            keepgo = true;
         });
         panel.add(but_2);
 
@@ -241,11 +317,17 @@ public class CalculatorDemo extends JFrame {
         but_3.setBounds(x[2], y[4], BUT_WIDTH, BUT_HEIGHT);
         but_3.setCursor(cur);
         but_3.addActionListener(event ->{
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("3");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("3");
+                } else {
+                    tout.setText(tout.getText() + "3");
+                }
             }else {
-                tout.setText( tout.getText() + "3");
+                tout.setText("3");
+                addWrite = true;
             }
+            keepgo = true;
         });
         panel.add(but_3);
 
@@ -269,11 +351,17 @@ public class CalculatorDemo extends JFrame {
         but_0.setBounds(x[1], y[5], BUT_WIDTH, BUT_HEIGHT);
         but_0.setCursor(cur);
         but_0.addActionListener(event -> {
-            if (Pattern.matches("[0]*", tout.getText())) {
-                tout.setText("0");
+            if(addWrite) {
+                if (Pattern.matches("[0]*", tout.getText())) {
+                    tout.setText("0");
+                } else {
+                    tout.setText(tout.getText() + "0");
+                }
             }else {
-                tout.setText( tout.getText() + "0");
+                tout.setText("0");
+                addWrite = true;
             }
+            keepgo = true;
         });
         panel.add(but_0);
 
@@ -293,6 +381,23 @@ public class CalculatorDemo extends JFrame {
     public void showGUI(){
         //pack();
         setVisible(true);
+    }
+
+    public double calc( double x, String input, Opt model) {
+        double y = Double.parseDouble(input);
+        if (model == Opt.ADD) {
+            return x + y;
+        } else if (model == Opt.SUB) {
+            return x - y;
+        } else if (model == Opt.MUL) {
+            return x * y;
+        } else if (model == Opt.DIV) {
+            return x / y;
+        } else if (model == Opt.MOD) {
+            return x % y;
+        }
+        return y;
+
     }
 
     public void repaintFont(){
