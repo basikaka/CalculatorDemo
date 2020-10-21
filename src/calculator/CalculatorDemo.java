@@ -37,7 +37,8 @@ public class CalculatorDemo extends JFrame {
         DIV,
         MUL,
         ADD,
-        SUB
+        SUB,
+        EQUAL
     }
     Opt opt = Opt.NORMAL;
 
@@ -77,6 +78,10 @@ public class CalculatorDemo extends JFrame {
         but_c.setCursor( cur );
         but_c.addActionListener(event -> {
             tout.setText("0");
+            addWrite = true;
+            keepgo = true;
+            saveVal = 0;
+            opt = Opt.NORMAL;
         });
         panel.add(but_c);
 
@@ -93,11 +98,14 @@ public class CalculatorDemo extends JFrame {
            }
            if( str2.toString().equals("")){
                tout.setText("0");
+           }else if(str2.toString().equals("-")){
+               tout.setText("0");
            }
            else{
                tout.setText( str2.toString());
                //System.out.println(str2.toString());
            }
+            saveVal = Double.parseDouble(tout.getText());
         });
         panel.add(but_back);
 
@@ -106,15 +114,8 @@ public class CalculatorDemo extends JFrame {
         but_mod.setBackground(Color.WHITE);
         but_mod.setBounds(x[2], y[1], BUT_WIDTH, BUT_HEIGHT);
         but_mod.setCursor(cur);
-        panel.add(but_mod);
-
-        but_div = new JButton("/");
-        but_div.setFont(butFont);
-        but_div.setBackground(Color.WHITE);
-        but_div.setBounds(x[3], y[1], BUT_WIDTH, BUT_HEIGHT);
-        but_div.setCursor(cur);
-        but_div.addActionListener(event->{
-            if(Pattern.matches("([-]?\\d+[.]\\d*)|(\\d+)", tout.getText())){
+        but_mod.addActionListener(event->{
+            if(Pattern.matches("[-]?\\d+[.]?\\d*", tout.getText())){
                 if(keepgo){
                     saveVal = calc(saveVal, tout.getText(), opt);
                     if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
@@ -124,8 +125,32 @@ public class CalculatorDemo extends JFrame {
                     }
                     keepgo = false;
                     addWrite = false;
-                    opt = Opt.DIV;
+
                 }
+                opt = Opt.MOD;
+            }
+        });
+        panel.add(but_mod);
+
+        but_div = new JButton("/");
+        but_div.setFont(butFont);
+        but_div.setBackground(Color.WHITE);
+        but_div.setBounds(x[3], y[1], BUT_WIDTH, BUT_HEIGHT);
+        but_div.setCursor(cur);
+        but_div.addActionListener(event->{
+            if(Pattern.matches("[-]?\\d+[.]?\\d*", tout.getText())){
+                if(keepgo){
+                    saveVal = calc(saveVal, tout.getText(), opt);
+                    if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
+                        tout.setText( String.valueOf((int) saveVal));
+                    }else {
+                        tout.setText( String.valueOf(saveVal));
+                    }
+                    keepgo = false;
+                    addWrite = false;
+
+                }
+                opt = Opt.DIV;
             }
         });
         panel.add(but_div);
@@ -197,6 +222,22 @@ public class CalculatorDemo extends JFrame {
         but_mul.setBackground(Color.WHITE);
         but_mul.setBounds(x[3], y[2], BUT_WIDTH, BUT_HEIGHT);
         but_mul.setCursor(cur);
+        but_mul.addActionListener(event->{
+            if(Pattern.matches("[-]?\\d+[.]?\\d*", tout.getText())){
+                if(keepgo){
+                    saveVal = calc(saveVal, tout.getText(), opt);
+                    if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
+                        tout.setText( String.valueOf((int) saveVal));
+                    }else {
+                        tout.setText( String.valueOf(saveVal));
+                    }
+                    keepgo = false;
+                    addWrite = false;
+
+                }
+                opt = Opt.MUL;
+            }
+        });
         panel.add(but_mul);
 
 
@@ -268,6 +309,22 @@ public class CalculatorDemo extends JFrame {
         but_add.setBackground(Color.WHITE);
         but_add.setBounds(x[3], y[3], BUT_WIDTH, BUT_HEIGHT);
         but_add.setCursor(cur);
+        but_add.addActionListener(event->{
+            if(Pattern.matches("[-]?\\d+[.]?\\d*", tout.getText())){
+                if(keepgo){
+                    saveVal = calc(saveVal, tout.getText(), opt);
+                    if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
+                        tout.setText( String.valueOf((int) saveVal));
+                    }else {
+                        tout.setText( String.valueOf(saveVal));
+                    }
+                    keepgo = false;
+                    addWrite = false;
+
+                }
+                opt = Opt.ADD;
+            }
+        });
         panel.add(but_add);
 
 
@@ -336,6 +393,21 @@ public class CalculatorDemo extends JFrame {
         but_sub.setBackground(Color.WHITE);
         but_sub.setBounds(x[3], y[4], BUT_WIDTH, BUT_HEIGHT);
         but_sub.setCursor(cur);
+        but_sub.addActionListener(event->{
+            if(Pattern.matches("[-]?\\d+[.]?\\d*", tout.getText())){
+                if(keepgo){
+                    saveVal = calc(saveVal, tout.getText(), opt);
+                    if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
+                        tout.setText( String.valueOf((int) saveVal));
+                    }else {
+                        tout.setText( String.valueOf(saveVal));
+                    }
+                    keepgo = false;
+                    addWrite = false;
+                }
+                opt = Opt.SUB;
+            }
+        });
         panel.add(but_sub);
 
         but_dot = new JButton(".");
@@ -343,6 +415,19 @@ public class CalculatorDemo extends JFrame {
         but_dot.setBackground(Color.WHITE);
         but_dot.setBounds(x[0], y[5], BUT_WIDTH, BUT_HEIGHT);
         but_dot.setCursor(cur);
+        but_dot.addActionListener(event->{
+            if(addWrite) {
+                if (Pattern.matches("[-]?\\d+[.]\\d*", tout.getText())) {
+                    tout.setText(tout.getText());
+                } else if(Pattern.matches("[-]?\\d+$",  tout.getText())) {
+                    tout.setText(tout.getText() + ".");
+                }
+            }else {
+                tout.setText("0.");
+                addWrite = true;
+            }
+            keepgo = true;
+        });
         panel.add(but_dot);
 
         but_0 = new JButton("0");
@@ -368,12 +453,26 @@ public class CalculatorDemo extends JFrame {
         but_equal = new JButton("=");
         but_equal.setFont(butFont);
         but_equal.setBackground(Color.WHITE);
-        but_equal.setBounds(x[2], y[5], BUT_WIDTH, BUT_HEIGHT);
+        but_equal.setBounds(x[2], y[5], 170, BUT_HEIGHT);
         but_equal.setCursor(cur);
+        but_equal.addActionListener(event->{
+            if(Pattern.matches("[-]?\\d+[.]?\\d*", tout.getText())){
+                if(keepgo){
+                    saveVal = calc(saveVal, tout.getText(), opt);
+                    if(Pattern.matches("([-]?\\d+[.][0]*)", String.valueOf(saveVal))){
+                        tout.setText( String.valueOf((int) saveVal));
+                    }else {
+                        tout.setText( String.valueOf(saveVal));
+                    }
+                    keepgo = false;
+                    addWrite = false;
+                    opt = Opt.EQUAL;
+                }
+            }
+        });
         panel.add(but_equal);
 
         add(panel);
-
     }
 
 
